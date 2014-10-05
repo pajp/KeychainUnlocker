@@ -94,7 +94,7 @@
                 [self.spinner stopAnimation:nil];
                 [self.spinner setHidden:YES];
                 NSString* errorMsg = CFBridgingRelease(SecCopyErrorMessageString(unlockStatus, NULL));
-                NSAlert* alert = [NSAlert alertWithMessageText:@"Failed to unlock keychain" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"There was an error attempting to unlock the keychain. %@", errorMsg];
+                NSAlert* alert = [NSAlert alertWithMessageText:@"Failed to unlock keychain" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"There was an error unlocking the keychain. %@", errorMsg];
                 [alert beginSheetModalForWindow:self.window completionHandler:nil];
             });
             return;
