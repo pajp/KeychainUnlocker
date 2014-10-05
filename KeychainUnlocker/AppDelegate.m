@@ -2,6 +2,19 @@
 //  AppDelegate.m
 //  KeychainUnlocker
 //
+// This application will attempt unlock the login keychain using a password
+// stored in encrypted form in ~/keychain-passwords/login.
+//
+// It is hard coded to use key with ID "2" on a smartcard to decrypt the password file.
+//
+// The password file can encrypted like this:
+// pkcs15-tool --read-public-key 2 > smartcard-crypt-pubkey
+// echo -n 'PASSWORD' | openssl rsautl -encrypt -pubin -inkey smartcard-crypt-pubkey -pkcs -out ~/keychain-passwords/login
+//
+// Warning: the above line may store your password in your shell history.
+// You may want to run "history -c" afterwards, and clear any Terminal scrollback
+// buffers
+//
 //  Created by Rasmus Sten on 04-10-2014.
 //  Copyright (c) 2014 Rasmus Sten. All rights reserved.
 //
@@ -16,10 +29,8 @@
 
 @implementation AppDelegate
 
-/*
- pkcs15-tool --read-public-key 2 > gpg-crypt-pubkey
- echo -n 'PASSWORD' | openssl rsautl -encrypt -pubin -inkey gpg-crypt-pubkey -pkcs -out encrypted.txt
- */
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.icon.image = [NSImage imageNamed:NSImageNameLockLockedTemplate];
 }
