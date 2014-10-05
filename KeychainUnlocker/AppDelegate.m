@@ -23,8 +23,10 @@
 
 #import "AppDelegate.h"
 #include <Security/Security.h>
+#include <QuartzCore/QuartzCore.h>
 
-@interface AppDelegate ()
+@interface AppDelegate () {
+}
 
 @property (weak) IBOutlet NSWindow *window;
 @end
@@ -32,30 +34,51 @@
 @implementation AppDelegate
 
 
+- (void)applicationWillFinishLaunching:(NSNotification *)notification {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"key-id" : @( 2 ),
+                                                               @"keychain" : @"login"
+                                                               }];
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.icon.image = [NSImage imageNamed:NSImageNameLockLockedTemplate];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"key-id" : @( 2 ) }];
+    SecKeychainRef keychain = NULL;
+    [self setupKeychain:&keychain];
 }
 
-- (IBAction)passwordFieldAction:(id)sender {
-    SecKeychainRef keychain = NULL;
-    NSString* keychainFile = [NSString stringWithFormat:@"%@/Library/Keychains/login.keychain", NSHomeDirectory()];
-    OSStatus openStatus = SecKeychainOpen(keychainFile.fileSystemRepresentation, &keychain);
+- (NSString*)setupKeychain:(SecKeychainRef*) keychain
+{
+    NSString* keychainName = [[NSUserDefaults standardUserDefaults] stringForKey:@"keychain"];
+    NSString* keychainFile = [NSString stringWithFormat:@"%@/Library/Keychains/%@.keychain",
+                              NSHomeDirectory(),
+                              keychainName];
+    OSStatus openStatus = SecKeychainOpen(keychainFile.fileSystemRepresentation, keychain);
     if (openStatus != errSecSuccess) {
         NSLog(@"Failed to open keychain %@: %d", keychainFile, openStatus);
-        return;
+        return nil;
     }
     SecKeychainStatus keychainStatus;
-    OSStatus statusStatus = SecKeychainGetStatus(keychain, &keychainStatus);
+    OSStatus statusStatus = SecKeychainGetStatus(*keychain, &keychainStatus);
     if (statusStatus != errSecSuccess) {
-        NSLog(@"Error getting keychain status: %d", statusStatus);
-        return;
+        NSString* errorString = CFBridgingRelease(SecCopyErrorMessageString(statusStatus, NULL));
+        NSLog(@"Error getting keychain status: %@ (%d) (keychain: %@)",  errorString, statusStatus, keychainFile);
+        return nil;
     }
     NSLog(@"Keychain status: %d", keychainStatus);
     if ((keychainStatus & kSecUnlockStateStatus) == kSecUnlockStateStatus) {
         NSLog(@"Keychain already unlocked, exiting");
-        [NSApp terminate:nil];
+        [self yippie];
+        return nil;
+    }
+    [self.passwordField setEnabled:YES];
+    return keychainFile;
+}
+
+- (IBAction)passwordFieldAction:(id)sender {
+    SecKeychainRef keychain = NULL;
+    NSString* keychainFile = [self setupKeychain:&keychain];
+    if (!keychainFile) {
+        return;
     }
 
     if ([self.passwordField.stringValue isEqualToString:@""]) {
@@ -120,14 +143,25 @@
             return;
         }
         NSLog(@"Successfully unlocked %@ keychain!", keychainName);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.spinner stopAnimation:nil];
-            [self.spinner setHidden:YES];
-        });
+        [self yippie];
+    });
+}
+
+-(void) yippie {
+    dispatch_async(dispatch_get_main_queue(), ^{
         self.icon.image = [NSImage imageNamed:NSImageNameLockUnlockedTemplate];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [NSApp terminate:nil];
-        });
+        [self.spinner stopAnimation:nil];
+        [self.spinner setHidden:YES];
+        
+        CABasicAnimation* a = [CABasicAnimation new];
+        a.keyPath = @"backgroundColor";
+        a.fromValue = (__bridge id)([[NSColor whiteColor] CGColor]);
+        a.toValue = (__bridge id)([[NSColor greenColor] CGColor]);
+        [self.passwordField.layer addAnimation:a forKey:nil];
+        self.passwordField.layer.backgroundColor = [[NSColor greenColor] CGColor];
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [NSApp terminate:nil];
     });
 }
 
