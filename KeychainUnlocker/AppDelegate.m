@@ -76,10 +76,13 @@
         NSLog(@"Decrypting using key %ld", (long)keyId);
         
         task.arguments = @[ /*@"-vvv",*/ @"-R", @"--decipher", @"-k", @(keyId).stringValue, @"-i", passwordFile, @"-p", @"-" ];
+
         NSPipe* stdout = [NSPipe new];
         NSPipe* stdin = [NSPipe new];
+        NSPipe* stderr = [NSPipe new];
         task.standardOutput = stdout;
         task.standardInput = stdin;
+        task.standardError = stderr;
         NSString* toSend = [NSString stringWithFormat:@"%@\n", self.passwordField.stringValue];
         NSData* pin = [toSend dataUsingEncoding:NSUTF8StringEncoding];
         [task launch];
@@ -87,6 +90,18 @@
         
         [stdinHandle writeData:pin];
         [task waitUntilExit];
+
+        if (task.terminationStatus != 0) {
+            NSString* pkcs15cryptError = [[NSString alloc] initWithData:[[stderr fileHandleForReading] readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+            NSLog(@"Error: %@", pkcs15cryptError);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.spinner stopAnimation:nil];
+                [self.spinner setHidden:YES];
+                NSAlert* alert = [NSAlert alertWithMessageText:@"Failed to decrypt password" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"There was an error decrypting the keychain password.\n%@", pkcs15cryptError];
+                [alert beginSheetModalForWindow:self.window completionHandler:nil];
+            });
+            return;
+        }
         
         NSData* password = [[stdout fileHandleForReading] readDataToEndOfFile];
         
