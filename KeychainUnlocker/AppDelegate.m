@@ -6,9 +6,11 @@
 // stored in encrypted form in ~/keychain-passwords/login.
 //
 // It is hard coded to use key with ID "2" on a smartcard to decrypt the password file.
+// To change key ID:
+//   defaults write nu.dll.KeychainUnlocker key-id
 //
 // The password file can encrypted like this:
-// pkcs15-tool --read-public-key 2 > smartcard-crypt-pubkey
+// pkcs15-tool --read-public-key 2 > smartcard-crypt-pubkey # 2 = key ID
 // echo -n 'PASSWORD' | openssl rsautl -encrypt -pubin -inkey smartcard-crypt-pubkey -pkcs -out ~/keychain-passwords/login
 //
 // Warning: the above line may store your password in your shell history.
@@ -33,6 +35,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.icon.image = [NSImage imageNamed:NSImageNameLockLockedTemplate];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"key-id" : @( 2 ) }];
 }
 
 - (IBAction)passwordFieldAction:(id)sender {
@@ -69,7 +72,10 @@
         task.launchPath = @"/usr/local/bin/pkcs15-crypt";
         NSString* keychainName = [[keychainFile lastPathComponent] stringByDeletingPathExtension];
         NSString* passwordFile = [NSString stringWithFormat:@"%@/keychain-passwords/%@", NSHomeDirectory(), keychainName];
-        task.arguments = @[ /*@"-vvv",*/ @"-R", @"--decipher", @"-k", @"2", @"-i", passwordFile, @"-p", @"-" ];
+        NSInteger keyId = [[NSUserDefaults standardUserDefaults] integerForKey:@"key-id"];
+        NSLog(@"Decrypting using key %ld", (long)keyId);
+        
+        task.arguments = @[ /*@"-vvv",*/ @"-R", @"--decipher", @"-k", @(keyId).stringValue, @"-i", passwordFile, @"-p", @"-" ];
         NSPipe* stdout = [NSPipe new];
         NSPipe* stdin = [NSPipe new];
         task.standardOutput = stdout;
@@ -83,7 +89,6 @@
         [task waitUntilExit];
         
         NSData* password = [[stdout fileHandleForReading] readDataToEndOfFile];
-        //NSLog(@"Read: %s", password.bytes);
         
         size_t passwordLength = password.length;
         
