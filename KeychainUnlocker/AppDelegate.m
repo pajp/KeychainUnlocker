@@ -159,6 +159,14 @@
         a.toValue = (__bridge id)([[NSColor greenColor] CGColor]);
         [self.passwordField.layer addAnimation:a forKey:nil];
         self.passwordField.layer.backgroundColor = [[NSColor greenColor] CGColor];
+
+        NSDictionary *f = @{NSViewAnimationTargetKey : self.window,
+                            NSViewAnimationEffectKey : NSViewAnimationFadeOutEffect};
+        NSViewAnimation *va = [[NSViewAnimation alloc] initWithViewAnimations:@[f]];
+        va.duration = 2.0;
+        va.animationBlockingMode = NSAnimationNonblocking;
+        [va startAnimation];
+
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [NSApp terminate:nil];
