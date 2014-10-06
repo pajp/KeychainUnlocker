@@ -7,7 +7,7 @@
 //
 // It is hard coded to use key with ID "2" on a smartcard to decrypt the password file.
 // To change key ID:
-//   defaults write nu.dll.KeychainUnlocker key-id
+//   defaults write nu.dll.KeychainUnlocker key-id 4711 # set key ID to 4711
 //
 // The password file can encrypted like this:
 // pkcs15-tool --read-public-key 2 > smartcard-crypt-pubkey # 2 = key ID
