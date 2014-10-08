@@ -12,6 +12,8 @@
 		3AB2A7DE19E058AC00227980 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AB2A7DD19E058AC00227980 /* Images.xcassets */; };
 		3AB2A7E119E058AC00227980 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AB2A7DF19E058AC00227980 /* MainMenu.xib */; };
 		3AB2A7ED19E058AC00227980 /* KeychainUnlockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AB2A7EC19E058AC00227980 /* KeychainUnlockerTests.m */; };
+		3ADDFCB019E3075E00335EE7 /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDFCAE19E3075E00335EE7 /* SetupViewController.m */; };
+		3ADDFCB119E3075E00335EE7 /* SetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ADDFCAF19E3075E00335EE7 /* SetupViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A87751419E4761D0025A330 /* KeychainUnlocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = KeychainUnlocker.entitlements; sourceTree = "<group>"; };
 		3AB2A7D319E058AC00227980 /* KeychainUnlocker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeychainUnlocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AB2A7D719E058AC00227980 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AB2A7D819E058AC00227980 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -35,6 +38,9 @@
 		3AB2A7E619E058AC00227980 /* KeychainUnlockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KeychainUnlockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AB2A7EB19E058AC00227980 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AB2A7EC19E058AC00227980 /* KeychainUnlockerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainUnlockerTests.m; sourceTree = "<group>"; };
+		3ADDFCAD19E3075E00335EE7 /* SetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupViewController.h; sourceTree = "<group>"; };
+		3ADDFCAE19E3075E00335EE7 /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
+		3ADDFCAF19E3075E00335EE7 /* SetupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetupViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +82,12 @@
 		3AB2A7D519E058AC00227980 /* KeychainUnlocker */ = {
 			isa = PBXGroup;
 			children = (
+				3A87751419E4761D0025A330 /* KeychainUnlocker.entitlements */,
 				3AB2A7DA19E058AC00227980 /* AppDelegate.h */,
 				3AB2A7DB19E058AC00227980 /* AppDelegate.m */,
+				3ADDFCAD19E3075E00335EE7 /* SetupViewController.h */,
+				3ADDFCAE19E3075E00335EE7 /* SetupViewController.m */,
+				3ADDFCAF19E3075E00335EE7 /* SetupViewController.xib */,
 				3AB2A7DD19E058AC00227980 /* Images.xcassets */,
 				3AB2A7DF19E058AC00227980 /* MainMenu.xib */,
 				3AB2A7D619E058AC00227980 /* Supporting Files */,
@@ -160,6 +170,11 @@
 				TargetAttributes = {
 					3AB2A7D219E058AC00227980 = {
 						CreatedOnToolsVersion = 6.0.1;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					3AB2A7E519E058AC00227980 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -192,6 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AB2A7DE19E058AC00227980 /* Images.xcassets in Resources */,
+				3ADDFCB119E3075E00335EE7 /* SetupViewController.xib in Resources */,
 				3AB2A7E119E058AC00227980 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AB2A7DC19E058AC00227980 /* AppDelegate.m in Sources */,
+				3ADDFCB019E3075E00335EE7 /* SetupViewController.m in Sources */,
 				3AB2A7D919E058AC00227980 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,6 +415,7 @@
 				3AB2A7F219E058AC00227980 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3AB2A7F319E058AC00227980 /* Build configuration list for PBXNativeTarget "KeychainUnlockerTests" */ = {
 			isa = XCConfigurationList;
@@ -406,6 +424,7 @@
 				3AB2A7F519E058AC00227980 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,12 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SetupViewController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 @property (weak) IBOutlet NSImageView *icon;
+@property (weak) IBOutlet NSPopUpButton *keychainPicker;
 @property (weak) IBOutlet NSSecureTextField *passwordField;
 @property (weak) IBOutlet NSProgressIndicator *spinner;
-
+@property SetupViewController* setupViewController;
+@property NSMutableDictionary* keys;
 @end
 

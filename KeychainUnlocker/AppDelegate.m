@@ -35,20 +35,25 @@
 
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"key-id" : @( 2 ),
-                                                               @"keychain" : @"login"
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"key-id" : @( 2 )
                                                                }];
+    self.keys = [NSMutableDictionary new];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.icon.image = [NSImage imageNamed:NSImageNameLockLockedTemplate];
     SecKeychainRef keychain = NULL;
+    [SetupViewController populateKeychainList:self.keychainPicker];
     [self setupKeychain:&keychain];
+    
+    self.setupViewController = [[SetupViewController alloc] initWithNibName:@"SetupViewController" bundle:nil];
+
+    [self.setupViewController open];
 }
 
 - (NSString*)setupKeychain:(SecKeychainRef*) keychain
 {
-    NSString* keychainName = [[NSUserDefaults standardUserDefaults] stringForKey:@"keychain"];
+    NSString* keychainName = self.keychainPicker.selectedItem.title;
     NSString* keychainFile = [NSString stringWithFormat:@"%@/Library/Keychains/%@.keychain",
                               NSHomeDirectory(),
                               keychainName];
@@ -66,11 +71,12 @@
     }
     NSLog(@"Keychain status: %d", keychainStatus);
     if ((keychainStatus & kSecUnlockStateStatus) == kSecUnlockStateStatus) {
-        NSLog(@"Keychain already unlocked, exiting");
-        [self yippie];
+        NSLog(@"Keychain already unlocked");
+        [self yippie:YES];
         return nil;
+    } else {
+        [self yippie:NO];
     }
-    [self.passwordField setEnabled:YES];
     return keychainFile;
 }
 
@@ -143,22 +149,27 @@
             return;
         }
         NSLog(@"Successfully unlocked %@ keychain!", keychainName);
-        [self yippie];
+        [self yippie:YES];
     });
 }
 
--(void) yippie {
+
+-(void) yippie:(BOOL)yay {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.icon.image = [NSImage imageNamed:NSImageNameLockUnlockedTemplate];
+        self.icon.image = yay ? [NSImage imageNamed:NSImageNameLockUnlockedTemplate] : [NSImage imageNamed:NSImageNameLockLockedTemplate];
         [self.spinner stopAnimation:nil];
         [self.spinner setHidden:YES];
         
         CABasicAnimation* a = [CABasicAnimation new];
         a.keyPath = @"backgroundColor";
-        a.fromValue = (__bridge id)([[NSColor whiteColor] CGColor]);
-        a.toValue = (__bridge id)([[NSColor greenColor] CGColor]);
+        a.fromValue = (__bridge id) ([(yay ? [NSColor whiteColor] : [NSColor greenColor]) CGColor]);
+        a.toValue = (__bridge id)([(yay ? [NSColor greenColor] : [NSColor whiteColor]) CGColor]);
         [self.passwordField.layer addAnimation:a forKey:nil];
-        self.passwordField.layer.backgroundColor = [[NSColor greenColor] CGColor];
+        self.passwordField.layer.backgroundColor = yay ? [[NSColor greenColor] CGColor] : [[NSColor whiteColor] CGColor];
+        
+        [self.passwordField setEnabled:!yay];
+        
+        return;
 
         NSDictionary *f = @{NSViewAnimationTargetKey : self.window,
                             NSViewAnimationEffectKey : NSViewAnimationFadeOutEffect};
@@ -169,11 +180,15 @@
 
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [NSApp terminate:nil];
+        //[NSApp terminate:nil];
     });
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
+}
+- (IBAction)keychainPickerAction:(id)sender {
+    SecKeychainRef keychain = NULL;
+    [self setupKeychain:&keychain];
 }
 
 @end
