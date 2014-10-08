@@ -1,19 +1,101 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5023" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="14A386a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5023"/>
+        <deployment defaultVersion="101000" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="SetupViewController">
             <connections>
+                <outlet property="keyList" destination="zvK-uu-JwN" id="Rdz-Dw-ueZ"/>
+                <outlet property="keychainList" destination="urD-AJ-Vgt" id="pLd-bd-68H"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+                <outlet property="window" destination="aTV-II-ebU" id="Zrb-g8-tgp"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sej-jV-5U6">
+                    <rect key="frame" x="18" y="228" width="100" height="26"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="uJa-XL-0RV" id="IgM-LD-uZO">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="menu"/>
+                        <menu key="menu" id="0wf-Ok-1ns">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="uJa-XL-0RV"/>
+                                <menuItem title="Item 2" id="bsY-oQ-dM4"/>
+                                <menuItem title="Item 3" id="rOo-Xl-YQP"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                </popUpButton>
+            </subviews>
         </customView>
+        <window title="Setup encrypted password" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="aTV-II-ebU">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="623" y="364" width="325" height="61"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
+            <view key="contentView" id="B2o-6Y-zrl">
+                <rect key="frame" x="0.0" y="0.0" width="325" height="61"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="urD-AJ-Vgt">
+                        <rect key="frame" x="18" y="17" width="73" height="26"/>
+                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="bp2-P8-J1S" id="pKZ-5t-cw8">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="wuu-Bx-1Xh">
+                                <items>
+                                    <menuItem title="Item 1" state="on" id="bp2-P8-J1S"/>
+                                    <menuItem title="Item 2" id="psD-AN-yCB"/>
+                                    <menuItem title="Item 3" id="jx7-RF-9A4"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                    </popUpButton>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zvK-uu-JwN">
+                        <rect key="frame" x="94" y="17" width="73" height="26"/>
+                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="HDI-pu-5Me" id="38s-fu-XcW">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="mts-9G-7JQ">
+                                <items>
+                                    <menuItem title="Item 1" state="on" id="HDI-pu-5Me"/>
+                                    <menuItem title="Item 2" id="786-au-z4S"/>
+                                    <menuItem title="Item 3" id="saK-dB-5CT"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                    </popUpButton>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w5d-EJ-EMN">
+                        <rect key="frame" x="166" y="13" width="145" height="32"/>
+                        <buttonCell key="cell" type="push" title="Create password" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Oxu-jP-ECT">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="generatePasswordAction:" target="-2" id="JpB-b7-iJW"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="zvK-uu-JwN" firstAttribute="leading" secondItem="urD-AJ-Vgt" secondAttribute="trailing" constant="8" id="3ip-pO-3Xe"/>
+                    <constraint firstItem="urD-AJ-Vgt" firstAttribute="leading" secondItem="B2o-6Y-zrl" secondAttribute="leading" constant="20" id="GHi-GZ-33h"/>
+                    <constraint firstItem="zvK-uu-JwN" firstAttribute="leading" secondItem="urD-AJ-Vgt" secondAttribute="trailing" constant="8" id="I6U-p0-7dp"/>
+                    <constraint firstAttribute="bottom" secondItem="urD-AJ-Vgt" secondAttribute="bottom" constant="20" id="SIF-eM-qb7"/>
+                    <constraint firstItem="zvK-uu-JwN" firstAttribute="baseline" secondItem="urD-AJ-Vgt" secondAttribute="baseline" id="TcM-Kp-uVJ"/>
+                    <constraint firstItem="w5d-EJ-EMN" firstAttribute="baseline" secondItem="zvK-uu-JwN" secondAttribute="baseline" id="a7B-62-YaV"/>
+                    <constraint firstItem="w5d-EJ-EMN" firstAttribute="leading" secondItem="zvK-uu-JwN" secondAttribute="trailing" constant="8" id="atu-tz-0ym"/>
+                    <constraint firstAttribute="trailing" secondItem="w5d-EJ-EMN" secondAttribute="trailing" constant="20" id="d9r-cJ-8hA"/>
+                    <constraint firstItem="urD-AJ-Vgt" firstAttribute="top" secondItem="B2o-6Y-zrl" secondAttribute="top" constant="20" id="kB6-yk-eJK"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="-151.5" y="189.5"/>
+        </window>
     </objects>
 </document>

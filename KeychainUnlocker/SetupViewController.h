@@ -9,5 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 @interface SetupViewController : NSViewController
-
+@property (weak) IBOutlet NSPopUpButton *keyList;
+@property (weak) IBOutlet NSPopUpButton *keychainList;
+@property (strong) IBOutlet NSWindow *window;
+@property NSMutableDictionary* keys;
+- (void) open;
++ (void) populateKeychainList:(NSPopUpButton*) keychainList;
 @end
