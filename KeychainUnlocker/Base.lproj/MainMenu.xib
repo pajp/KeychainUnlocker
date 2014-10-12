@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="14A386a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment defaultVersion="101000" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
     </dependencies>
     <objects>
@@ -13,6 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
+                <outlet property="exitOnSuccessCheckbox" destination="ehC-Nt-9mc" id="TK9-PR-8a8"/>
                 <outlet property="icon" destination="2Zc-J2-DyF" id="59r-3k-brd"/>
                 <outlet property="keychainPicker" destination="zCx-fZ-Z7A" id="KAr-kw-xVa"/>
                 <outlet property="passwordField" destination="ZKk-eL-y1Z" id="3Ig-2N-0gN"/>
@@ -101,14 +103,14 @@
         <window title="KeychainUnlocker" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="771" y="685" width="246" height="103"/>
+            <rect key="contentRect" x="771" y="685" width="246" height="143"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="246" height="103"/>
+                <rect key="frame" x="0.0" y="0.0" width="246" height="143"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <secureTextField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZKk-eL-y1Z">
-                        <rect key="frame" x="20" y="20" width="206" height="22"/>
+                        <rect key="frame" x="20" y="60" width="206" height="22"/>
                         <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="7my-OY-CzE">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -122,21 +124,21 @@
                         </connections>
                     </secureTextField>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2Zc-J2-DyF">
-                        <rect key="frame" x="204" y="20" width="22" height="22"/>
+                        <rect key="frame" x="204" y="20" width="22" height="102"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="22" id="jX5-cy-lYq"/>
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="Dl0-qD-S64"/>
                     </imageView>
                     <progressIndicator hidden="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="tbT-Du-Qsb">
-                        <rect key="frame" x="185" y="23" width="16" height="16"/>
+                        <rect key="frame" x="185" y="63" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="7Hz-Gv-T8n"/>
                             <constraint firstAttribute="width" constant="16" id="qgH-op-DBW"/>
                         </constraints>
                     </progressIndicator>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zCx-fZ-Z7A">
-                        <rect key="frame" x="18" y="59" width="211" height="26"/>
+                        <rect key="frame" x="18" y="99" width="211" height="26"/>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="evR-k0-Iqo" id="xkW-1l-Oss">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
@@ -152,23 +154,32 @@
                             <action selector="keychainPickerAction:" target="Voe-Tx-rLC" id="2Ky-95-jCu"/>
                         </connections>
                     </popUpButton>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="ehC-Nt-9mc">
+                        <rect key="frame" x="18" y="18" width="119" height="24"/>
+                        <buttonCell key="cell" type="check" title="Exit on success" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Rwm-JR-5gC">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="ZKk-eL-y1Z" secondAttribute="bottom" constant="20" id="7Gw-lb-mMd"/>
+                    <constraint firstItem="ehC-Nt-9mc" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="1Rx-0T-6Ur"/>
                     <constraint firstAttribute="trailing" secondItem="zCx-fZ-Z7A" secondAttribute="trailing" constant="20" id="OAi-qC-pmW"/>
                     <constraint firstItem="ZKk-eL-y1Z" firstAttribute="top" secondItem="zCx-fZ-Z7A" secondAttribute="bottom" constant="20" id="ORn-sB-wqy"/>
                     <constraint firstItem="ZKk-eL-y1Z" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="Oso-wP-oxz"/>
                     <constraint firstItem="zCx-fZ-Z7A" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="P1e-Uj-eWO"/>
                     <constraint firstItem="zCx-fZ-Z7A" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="PH0-hS-clc"/>
                     <constraint firstItem="tbT-Du-Qsb" firstAttribute="centerY" secondItem="ZKk-eL-y1Z" secondAttribute="centerY" id="QhM-Jl-3fo"/>
+                    <constraint firstAttribute="bottom" secondItem="ehC-Nt-9mc" secondAttribute="bottom" constant="20" id="ZAb-Bo-eEG"/>
                     <constraint firstAttribute="bottom" secondItem="2Zc-J2-DyF" secondAttribute="bottom" constant="20" id="ihx-sU-hUw"/>
                     <constraint firstAttribute="trailing" secondItem="ZKk-eL-y1Z" secondAttribute="trailing" constant="20" id="jtH-vz-0oZ"/>
+                    <constraint firstItem="ehC-Nt-9mc" firstAttribute="top" secondItem="ZKk-eL-y1Z" secondAttribute="bottom" constant="20" id="o3s-PB-BrN"/>
                     <constraint firstAttribute="trailing" secondItem="tbT-Du-Qsb" secondAttribute="trailing" constant="45" id="qph-gz-nSC"/>
                     <constraint firstItem="ZKk-eL-y1Z" firstAttribute="centerY" secondItem="2Zc-J2-DyF" secondAttribute="centerY" id="sAw-er-bMk"/>
                     <constraint firstAttribute="trailing" secondItem="2Zc-J2-DyF" secondAttribute="trailing" constant="20" id="zXF-oV-cYf"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="341" y="276.5"/>
+            <point key="canvasLocation" x="341" y="296.5"/>
         </window>
     </objects>
 </document>

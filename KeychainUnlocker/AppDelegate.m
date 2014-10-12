@@ -26,6 +26,7 @@
 #include <QuartzCore/QuartzCore.h>
 
 @interface AppDelegate () {
+    BOOL justLaunched;
 }
 
 @property (weak) IBOutlet NSWindow *window;
@@ -38,6 +39,7 @@
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"key-id" : @( 2 )
                                                                }];
     self.keys = [NSMutableDictionary new];
+    justLaunched = YES;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -179,18 +181,25 @@
         
         [self.passwordField setEnabled:!yay];
         
-        return;
+        if (justLaunched) {
+            justLaunched = NO;
+            return;
+        }
+        
+        if (yay && self.exitOnSuccessCheckbox.integerValue) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                NSDictionary *f = @{NSViewAnimationTargetKey : self.window,
+                                    NSViewAnimationEffectKey : NSViewAnimationFadeOutEffect};
+                NSViewAnimation *va = [[NSViewAnimation alloc] initWithViewAnimations:@[f]];
+                va.duration = 1.0;
+                va.animationBlockingMode = NSAnimationNonblocking;
+                [va startAnimation];
+            });
 
-        NSDictionary *f = @{NSViewAnimationTargetKey : self.window,
-                            NSViewAnimationEffectKey : NSViewAnimationFadeOutEffect};
-        NSViewAnimation *va = [[NSViewAnimation alloc] initWithViewAnimations:@[f]];
-        va.duration = 2.0;
-        va.animationBlockingMode = NSAnimationNonblocking;
-        [va startAnimation];
-
-    });
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        //[NSApp terminate:nil];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)),dispatch_get_main_queue(), ^{
+                [NSApp terminate:nil];
+            });
+        }
     });
 }
 

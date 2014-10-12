@@ -11,6 +11,7 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
+@property (weak) IBOutlet NSButton *exitOnSuccessCheckbox;
 @property (weak) IBOutlet NSImageView *icon;
 @property (weak) IBOutlet NSPopUpButton *keychainPicker;
 @property (weak) IBOutlet NSSecureTextField *passwordField;
