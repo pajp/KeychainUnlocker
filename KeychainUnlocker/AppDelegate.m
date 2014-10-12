@@ -2,20 +2,11 @@
 //  AppDelegate.m
 //  KeychainUnlocker
 //
-// This application will attempt unlock the login keychain using a password
-// stored in encrypted form in ~/keychain-passwords/login.
+// This application will attempt unlock keychains using a password
+// stored in encrypted form in ~/keychain-passwords/<keychainname>.
+// The password is encrypted and decrypted using an RSA key on a
+// smart card.
 //
-// It is hard coded to use key with ID "2" on a smartcard to decrypt the password file.
-// To change key ID:
-//   defaults write nu.dll.KeychainUnlocker key-id 4711 # set key ID to 4711
-//
-// The password file can encrypted like this:
-// pkcs15-tool --read-public-key 2 > smartcard-crypt-pubkey # 2 = key ID
-// echo -n 'PASSWORD' | openssl rsautl -encrypt -pubin -inkey smartcard-crypt-pubkey -pkcs -out ~/keychain-passwords/login
-//
-// Warning: the above line may store your password in your shell history.
-// You may want to run "history -c" afterwards, and clear any Terminal scrollback
-// buffers
 //
 //  Created by Rasmus Sten on 04-10-2014.
 //  Copyright (c) 2014 Rasmus Sten. All rights reserved.
