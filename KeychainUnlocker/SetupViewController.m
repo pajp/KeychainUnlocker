@@ -201,7 +201,7 @@
         chmod(scriptFile.bytes, 0700);
         
         NSAlert* alert = [NSAlert alertWithMessageText:@"New password saved" defaultButton:@"Open Terminal and run the 'security set-keychain-password' command" alternateButton:@"That's OK, I'll do it later" otherButton:nil informativeTextWithFormat:@"A password was generated and stored for the %@ keychain. You need to manually change the keychain password, and can do so using the 'security set-keychain-password' command (or using Keychain Access, but then you can't paste the password into the password field).\n\n"
-                          "The generated password is:\n%@\n\nIt has been copied to your clipboard and will remain there for five minutes.", keychain, _password];
+                          "The generated password is:\n%@\n\nIt has been copied to your clipboard.", keychain, _password];
         NSPasteboard* pb = [NSPasteboard pasteboardWithName:NSGeneralPboard];
         [pb clearContents];
         [pb writeObjects:@[ _password ]];
