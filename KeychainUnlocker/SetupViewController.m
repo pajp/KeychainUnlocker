@@ -8,6 +8,8 @@
 
 #import "SetupViewController.h"
 #include <Security/Security.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 @interface SetupViewController ()
 
@@ -168,8 +170,8 @@
     NSLog(@"Selected key: %@", key);
     NSString* keychain = [self.keychainList titleOfSelectedItem];
     NSString* passwordFile = [[NSString stringWithFormat:@"~/keychain-passwords/%@", keychain] stringByExpandingTildeInPath];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:passwordFile]) {
+    NSFileManager* fm = [NSFileManager defaultManager];
+    if ([fm fileExistsAtPath:passwordFile]) {
         NSAlert* alert = [NSAlert alertWithMessageText:@"Password file already exists" defaultButton:@"OK" alternateButton:@"Reveal password file in Finder" otherButton:nil informativeTextWithFormat:@"A password file has already been created for keychain \"%@\". Delete it manually if you want to create new password for it.", keychain];
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
             if (returnCode == 0) {
@@ -188,8 +190,18 @@
             NSLog(@"Failed to write password file!");
             return;
         }
-        NSAlert* alert = [NSAlert alertWithMessageText:@"New password saved" defaultButton:@"Open Keychain Access" alternateButton:@"That's OK, I'll do it later" otherButton:nil informativeTextWithFormat:@"A password was generated and stored for the %@ keychain. You need to manually change the keychain password in the Keychain Access app.\n\n"
-                          "The generated password is:\n%@\n\nIt has been copied to your clipboard.", keychain, _password];
+        
+        char* scriptFileBytes = strdup("/tmp/setpasswordscript.XXXXXX");
+        NSData* scriptFile = [NSData dataWithBytesNoCopy:scriptFileBytes length:strlen(scriptFileBytes) freeWhenDone:YES];
+        int fd = mkstemp(scriptFileBytes);
+        NSString* script = [NSString stringWithFormat:@"#!/bin/sh\n/usr/bin/security set-keychain-password ~/Library/Keychains/%@.keychain\n", keychain];
+        NSData* d = [script dataUsingEncoding:NSUTF8StringEncoding];
+        write(fd, d.bytes, d.length);
+        close(fd);
+        chmod(scriptFile.bytes, 0700);
+        
+        NSAlert* alert = [NSAlert alertWithMessageText:@"New password saved" defaultButton:@"Open Terminal and run the 'security set-keychain-password' command" alternateButton:@"That's OK, I'll do it later" otherButton:nil informativeTextWithFormat:@"A password was generated and stored for the %@ keychain. You need to manually change the keychain password, and can do so using the 'security set-keychain-password' command (or using Keychain Access, but then you can't paste the password into the password field).\n\n"
+                          "The generated password is:\n%@\n\nIt has been copied to your clipboard and will remain there for five minutes.", keychain, _password];
         NSPasteboard* pb = [NSPasteboard pasteboardWithName:NSGeneralPboard];
         [pb clearContents];
         [pb writeObjects:@[ _password ]];
@@ -197,7 +209,7 @@
             [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
                 NSLog(@"final sheet return code: %ld", (long)returnCode);
                 if (returnCode == 1) {
-                    [[NSWorkspace sharedWorkspace] openFile:@"/Applications/Utilities/Keychain Access.app"];
+                    [[NSWorkspace sharedWorkspace] openFile:[fm stringWithFileSystemRepresentation:scriptFile.bytes length:scriptFile.length] withApplication:@"Terminal"];
                 }
             }];
         });
