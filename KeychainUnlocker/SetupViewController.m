@@ -20,23 +20,19 @@
     if (self) {
         self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
         self.keys = [NSMutableDictionary new];
+        [self loadView];
     }
     return self;
 }
 
 - (void) open
 {
-    
-    [self.window setIsVisible:YES];
-    [self.window orderWindow:NSWindowAbove relativeTo:self.window.orderedIndex];
-    
-    NSLog(@"SetupViewController View: %@", self.view);
-    
-    [SetupViewController populateKeychainList:self.keychainList];
+    [self.window makeKeyAndOrderFront:nil];
+    [SetupViewController populateKeychainList:self.keychainList onlyUnlockable:NO];
     [self populateKeyList:self.keyList andKeyMap:self.keys];
 }
 
-+ (void) populateKeychainList:(NSPopUpButton*) keychainList
++ (void) populateKeychainList:(NSPopUpButton*) keychainList onlyUnlockable:(BOOL) unlockable
 {
     [keychainList removeAllItems];
     NSFileManager* fm = [NSFileManager defaultManager];
@@ -47,6 +43,11 @@
             continue;
         }
         NSString* keychainName = [[file lastPathComponent] stringByDeletingPathExtension];
+        NSString* passwordFileName = [NSString stringWithFormat:[@"~/keychain-passwords/%@" stringByExpandingTildeInPath], keychainName];
+        if (unlockable && ![fm fileExistsAtPath:passwordFileName]) {
+            NSLog(@"No password file %@ for keychain %@, ignoring", passwordFileName, keychainName);
+            continue;
+        }
         [keychainList addItemWithTitle:keychainName];
         if ([keychainName isEqualToString:@"login"]) {
             [keychainList selectItemWithTitle:@"login"];

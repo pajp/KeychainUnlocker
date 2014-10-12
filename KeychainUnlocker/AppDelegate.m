@@ -43,11 +43,21 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.icon.image = [NSImage imageNamed:NSImageNameLockLockedTemplate];
     SecKeychainRef keychain = NULL;
-    [SetupViewController populateKeychainList:self.keychainPicker];
+    [SetupViewController populateKeychainList:self.keychainPicker onlyUnlockable:YES];
+    if (self.keychainPicker.itemArray.count == 0) {
+        [self openSetupView];
+    }
     [self setupKeychain:&keychain];
-    
-    self.setupViewController = [[SetupViewController alloc] initWithNibName:@"SetupViewController" bundle:nil];
+}
+- (IBAction)preferencesAction:(id)sender {
+    [self openSetupView];
+}
 
+- (void) openSetupView
+{
+    if (!self.setupViewController) {
+        self.setupViewController = [[SetupViewController alloc] initWithNibName:@"SetupViewController" bundle:nil];
+    }
     [self.setupViewController open];
 }
 

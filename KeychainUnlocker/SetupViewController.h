@@ -14,5 +14,5 @@
 @property (strong) IBOutlet NSWindow *window;
 @property NSMutableDictionary* keys;
 - (void) open;
-+ (void) populateKeychainList:(NSPopUpButton*) keychainList;
++ (void) populateKeychainList:(NSPopUpButton*) keychainList onlyUnlockable:(BOOL) unlockable;
 @end
